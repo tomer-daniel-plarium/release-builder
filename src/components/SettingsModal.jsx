@@ -21,6 +21,7 @@ export default function SettingsModal({ isOpen, onClose }) {
     gcpRegion: 'us-central1',
     accessToken: '',
     model: 'gemini-2.0-flash',
+    githubToken: '',
   });
   const [saved, setSaved] = useState(false);
 
@@ -113,6 +114,18 @@ export default function SettingsModal({ isOpen, onClose }) {
               <option value="gemini-2.5-pro-preview-05-06">Gemini 2.5 Pro (best quality)</option>
               <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite (cheapest)</option>
             </select>
+          </div>
+
+          <div className="border-t border-[#c8d9f0]/50 pt-4 mt-1">
+            <h3 className="text-xs font-bold text-[#0d1b2e] mb-3">Image Hosting (GitHub)</h3>
+            <div>
+              <label className={labelCls}>GitHub Personal Access Token</label>
+              <input type="password" className={inputCls} placeholder="ghp_..."
+                value={settings.githubToken} onChange={e => update('githubToken', e.target.value)} />
+              <p className="text-[10px] text-[#5a7a99] mt-1">
+                Used to upload images to your repo. Needs <code className="bg-[#ECF2FC] px-1 py-0.5 rounded text-[10px]">repo</code> scope.
+              </p>
+            </div>
           </div>
         </div>
 

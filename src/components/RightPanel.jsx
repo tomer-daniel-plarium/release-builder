@@ -1,3 +1,58 @@
+import { useState } from 'react';
+import { uploadImage } from '../utils/imageUploader';
+
+function ImageUploadZone({ onUploaded }) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState('');
+  const [dragOver, setDragOver] = useState(false);
+
+  const handleFile = async (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      setError('Please select an image file.');
+      return;
+    }
+    setError('');
+    setUploading(true);
+    try {
+      const url = await uploadImage(file);
+      onUploaded(url);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="mb-3">
+      <label className="block text-[10px] font-semibold text-[#5a7a99] uppercase tracking-wider mb-1">Upload Image</label>
+      <div
+        onDragOver={e => { e.preventDefault(); setDragOver(true); }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={e => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); }}
+        className={`border-2 border-dashed rounded-lg p-3 text-center cursor-pointer transition-colors ${
+          dragOver ? 'border-[#5A8DE3] bg-[#ECF2FC]' : 'border-[#c8d9f0] hover:border-[#5A8DE3]'
+        }`}
+        onClick={() => { if (!uploading) document.getElementById('img-upload-input')?.click(); }}
+      >
+        {uploading ? (
+          <span className="text-[11px] text-[#5A8DE3] font-semibold">Uploading...</span>
+        ) : (
+          <span className="text-[11px] text-[#5a7a99]">Drop image here or click to browse</span>
+        )}
+        <input
+          id="img-upload-input"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={e => handleFile(e.target.files?.[0])}
+        />
+      </div>
+      {error && <p className="text-[10px] text-red-500 mt-1">{error}</p>}
+    </div>
+  );
+}
+
 function Field({ label, children }) {
   return (
     <div className="mb-3">
@@ -114,7 +169,13 @@ const EDITORS = {
     <Field label="Color"><ColorInput value={props.color} onChange={v => up({ color: v })} /></Field>
   </>),
   image: (props, up) => (<>
+    <ImageUploadZone onUploaded={url => up({ url })} />
     <Field label="Image URL"><TextInput value={props.url} onChange={v => up({ url: v })} /></Field>
+    {props.url && (
+      <div className="mb-3 rounded overflow-hidden border border-[#c8d9f0]">
+        <img src={props.url} alt="preview" className="w-full object-cover" style={{ maxHeight: 120 }} />
+      </div>
+    )}
     <Field label="Caption"><TextInput value={props.caption} onChange={v => up({ caption: v })} /></Field>
     <Field label="Height (px)"><NumberInput value={props.height} onChange={v => up({ height: v })} min={100} max={600} /></Field>
   </>),

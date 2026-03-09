@@ -176,8 +176,10 @@ const EDITORS = {
         <img src={props.url} alt="preview" className="w-full object-cover" style={{ maxHeight: 120 }} />
       </div>
     )}
+    <Field label="Width (px, empty = full)"><TextInput value={props.width ? String(props.width) : ''} onChange={v => up({ width: v ? Number(v) : null })} /></Field>
+    <Field label="Alignment"><SelectInput value={props.alignment || 'center'} onChange={v => up({ alignment: v })} options={['left', 'center', 'right']} /></Field>
     <Field label="Caption"><TextInput value={props.caption} onChange={v => up({ caption: v })} /></Field>
-    <Field label="Height (px)"><NumberInput value={props.height} onChange={v => up({ height: v })} min={100} max={600} /></Field>
+    <Field label="Placeholder Height (px)"><NumberInput value={props.height} onChange={v => up({ height: v })} min={100} max={600} /></Field>
   </>),
   features: (props, up) => (<>
     <Field label="Section Title"><TextInput value={props.sectionTitle} onChange={v => up({ sectionTitle: v })} /></Field>

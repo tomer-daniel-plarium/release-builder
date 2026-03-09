@@ -27,8 +27,12 @@ function renderComp(c) {
     return `<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:${ff};font-size:${p.fontSize || 15}px;color:${p.color || '#2c3e55'};line-height:1.7;padding:0 0 28px 0;">${esc(p.text).replace(/\n/g, '<br/>')}</td></tr></table>`;
 
   if (c.type === 'image') {
-    if (p.url)
-      return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px 0;"><tr><td style="padding:0;"><img src="${esc(p.url)}" width="100%" style="display:block;border-radius:10px;" alt="${esc(p.caption || '')}"/></td></tr></table>`;
+    if (p.url) {
+      const align = p.alignment || 'center';
+      const w = p.width ? `width="${p.width}"` : 'width="100%"';
+      const radius = p.width ? '' : 'border-radius:10px;';
+      return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px 0;"><tr><td align="${align}" style="padding:0;"><img src="${esc(p.url)}" ${w} style="display:block;${radius}" alt="${esc(p.caption || '')}"/></td></tr></table>`;
+    }
     return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px 0;"><tr><td align="center" valign="middle" style="height:${p.height || 180}px;background:linear-gradient(135deg,${N1},${N2});border-radius:10px;padding:20px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td style="color:rgba(255,255,255,0.4);font-family:${ff};font-size:12px;letter-spacing:2px;text-transform:uppercase;">${esc(p.caption || 'Image placeholder')}</td></tr></table></td></tr></table>`;
   }
 

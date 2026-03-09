@@ -282,24 +282,6 @@ export default function BlockRenderer({ component }) {
 }
 
 export function EmailHeader({ app, tagline = 'Release Notes' }) {
-  if (app.headerImage) {
-    return (
-      <div style={{
-        background: `linear-gradient(135deg, ${N1} 0%, ${N2} 60%, ${N1} 100%)`,
-        borderBottom: `2px solid ${B}`,
-        textAlign: 'center',
-      }}>
-        <p style={{ color: B, fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', margin: 0, padding: '24px 40px 16px', fontFamily: ff }}>
-          Data Applications · Midcore District, MTG
-        </p>
-        <img src={app.headerImage} alt={app.name} style={{ display: 'block', width: '100%', pointerEvents: 'none' }} />
-        <p style={{ color: B, fontSize: 10, letterSpacing: 4, textTransform: 'uppercase', margin: 0, padding: '10px 40px 24px', fontFamily: ff }}>
-          {tagline}
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div style={{
       position: 'relative', overflow: 'hidden',
@@ -317,7 +299,9 @@ export function EmailHeader({ app, tagline = 'Release Notes' }) {
         <p style={{ color: B, fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 20px', fontFamily: ff }}>
           Data Applications · Midcore District, MTG
         </p>
-        {app.svgRaw ? (
+        {app.headerImage ? (
+          <img src={app.headerImage} alt={app.name} style={{ display: 'block', maxWidth: 420, width: '100%', margin: '0 auto', pointerEvents: 'none' }} />
+        ) : app.svgRaw ? (
           <SvgIcon svgRaw={app.svgRaw} w={110} h={127} centered />
         ) : (
           <div style={{

@@ -71,7 +71,7 @@ function renderComp(c) {
 
   if (c.type === 'numbered') {
     const rows = (p.items || []).map((it, idx) =>
-      `<tr><td width="30" valign="top" style="padding-top:1px;"><table cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="width:24px;height:24px;background:${B};color:#fff;font-family:${ff};font-size:11px;font-weight:700;border-radius:50%;line-height:24px;">${idx + 1}</td></tr></table></td><td style="padding-left:10px;padding-bottom:14px;font-family:${ff};font-size:14px;color:#2c3e55;line-height:1.65;">${esc(it.text)}</td></tr>`
+      `<tr><td width="30" valign="top" style="padding-top:0;"><table cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="width:22px;height:22px;background:${B};color:#fff;font-family:${ff};font-size:11px;font-weight:700;border-radius:50%;line-height:22px;">${idx + 1}</td></tr></table></td><td style="padding-left:10px;padding-bottom:14px;font-family:${ff};font-size:14px;color:#2c3e55;line-height:1.65;">${esc(it.text)}</td></tr>`
     ).join('');
     return `<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:${ff};font-size:17px;font-weight:800;color:${N1};padding:0 0 10px 0;border-bottom:1.5px solid ${BDR};">${esc(p.sectionTitle || '')}</td></tr></table><table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:14px 0 28px 0;">${rows}</table>`;
   }

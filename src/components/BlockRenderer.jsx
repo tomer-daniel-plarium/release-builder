@@ -201,12 +201,12 @@ function NumberedBlock({ props }) {
         }}>{props.sectionTitle}</p>
       )}
       {(props.items || []).map((item, i) => (
-        <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14, alignItems: 'baseline' }}>
+        <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 14, alignItems: 'flex-start' }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             width: 22, height: 22, minWidth: 22, borderRadius: '50%',
             background: B, color: '#fff', fontSize: 11, fontWeight: 700, fontFamily: ff,
-            position: 'relative', top: 4,
+            flexShrink: 0, marginTop: 1,
           }}>{i + 1}</span>
           <p style={{ fontSize: 14, color: '#2c3e55', lineHeight: 1.65, margin: 0, fontFamily: ff }}>
             {item.text}

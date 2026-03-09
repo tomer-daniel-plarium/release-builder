@@ -106,17 +106,26 @@ function isSpacer(el) {
   return null;
 }
 
+function directRows(table) {
+  const tbody = table?.querySelector(':scope > tbody') || table;
+  return Array.from(tbody?.children || []).filter(el => el.tagName === 'TR');
+}
+
+function directTds(row) {
+  return Array.from(row?.children || []).filter(el => el.tagName === 'TD');
+}
+
 function isBulletRow(row) {
-  const tds = row.querySelectorAll('td');
+  const tds = directTds(row);
   if (tds.length < 2) return false;
   const first = tds[0];
   return (first.getAttribute('width') === '16' || /[\u25B6-\u25C0\u2022\u2023\u25AA]/.test(txt(first)));
 }
 
 function parseFeatureItems(table) {
-  const rows = Array.from(table?.querySelectorAll?.('tr') || []);
-  return rows.filter(r => isBulletRow(r)).map(r => {
-    const contentTd = r.querySelectorAll('td')[1];
+  return directRows(table).filter(r => isBulletRow(r)).map(r => {
+    const tds = directTds(r);
+    const contentTd = tds[1];
     if (!contentTd) return null;
     const strong = contentTd.querySelector('strong');
     const boldText = strong ? txt(strong) : '';
@@ -128,20 +137,18 @@ function parseFeatureItems(table) {
 }
 
 function parseNumberedItems(table) {
-  const rows = Array.from(table?.querySelectorAll?.('tr') || []);
-  return rows.filter(r => {
-    const circleTd = r.querySelector('td[style*="border-radius:50%"], td[style*="border-radius: 50%"]');
-    return circleTd;
+  return directRows(table).filter(r => {
+    const tds = directTds(r);
+    return tds.length >= 2 && tds[0].getAttribute('width') === '30';
   }).map(r => {
-    const tds = r.querySelectorAll('td');
+    const tds = directTds(r);
     const contentTd = tds[tds.length - 1];
     return { text: txt(contentTd) };
   });
 }
 
 function parseWhatsNextItems(table) {
-  const rows = Array.from(table?.querySelectorAll?.('tr') || []);
-  return rows.filter(r => isBulletRow(r)).map(r => {
+  return directRows(table).filter(r => isBulletRow(r)).map(r => {
     const contentTd = r.querySelectorAll('td')[1];
     if (!contentTd) return null;
     const strong = contentTd.querySelector('strong');

@@ -69,6 +69,14 @@ function isButton(el) {
 }
 
 function isImage(el) {
+  const img = el.querySelector('img');
+  if (img && img.getAttribute('src')) {
+    const src = img.getAttribute('src');
+    const alt = img.getAttribute('alt') || '';
+    const w = img.getAttribute('width');
+    const width = w && w !== '100%' ? parseInt(w, 10) || null : null;
+    return { type: 'image', props: { url: src, caption: alt, width, height: 180 } };
+  }
   const td = allTds(el).find(t => {
     const s = style(t);
     return s.includes('height:220px') || s.includes('height: 220px') ||

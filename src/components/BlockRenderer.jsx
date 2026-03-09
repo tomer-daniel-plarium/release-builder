@@ -63,19 +63,23 @@ function BodyBlock({ props }) {
 
 function ImageBlock({ props }) {
   if (props.url) {
-    const w = props.width || 'auto';
+    const hasWidth = props.width && props.width > 0;
+    const align = props.alignment || 'center';
     const imgStyle = {
-      display: 'block', borderRadius: props.width ? 0 : 10,
+      display: 'block',
       maxWidth: '100%',
+      borderRadius: hasWidth ? 0 : 10,
     };
-    if (w !== 'auto') imgStyle.width = w;
-    else imgStyle.width = '100%';
+    if (hasWidth) {
+      imgStyle.width = props.width;
+      if (align === 'center') imgStyle.margin = '0 auto';
+      else if (align === 'right') imgStyle.marginLeft = 'auto';
+    } else {
+      imgStyle.width = '100%';
+    }
 
     return (
-      <div style={{
-        marginBottom: 28,
-        textAlign: props.alignment || 'center',
-      }}>
+      <div style={{ marginBottom: 28 }}>
         <img src={props.url} alt={props.caption || ''} style={imgStyle} />
       </div>
     );

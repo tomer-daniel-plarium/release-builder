@@ -94,16 +94,28 @@ function renderComp(c) {
   return '';
 }
 
-export function generateEmailHtml(app, components, { headerTagline = 'Release Notes', senderEmail = '' } = {}) {
+export function generateEmailHtml(app, components, { headerTagline = 'Release Notes', senderEmail = '', logoUrls = {} } = {}) {
   const blueSvg = convertSvgToBlue(app.svgRaw || '');
-  const headerLogo = blueSvg ? scaleSvg(blueSvg, 110, 127) : '';
-  const smSvg = blueSvg ? scaleSvg(blueSvg, 24, 28) : '';
   const hexBg = getHexBase64();
+
+  let headerLogo = '';
+  if (logoUrls.header) {
+    headerLogo = `<img src="${esc(logoUrls.header)}" width="110" height="127" style="display:block;" alt="${esc(app.name)}"/>`;
+  } else if (blueSvg) {
+    headerLogo = scaleSvg(blueSvg, 110, 127);
+  }
+
+  let footerLogoImg = '';
+  if (logoUrls.footer) {
+    footerLogoImg = `<img src="${esc(logoUrls.footer)}" width="24" height="28" style="display:block;" alt="${esc(app.name)}"/>`;
+  } else if (blueSvg) {
+    footerLogoImg = scaleSvg(blueSvg, 24, 28);
+  }
 
   const body = components.map(renderComp).join('\n');
 
-  const footerLogo = smSvg
-    ? `<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 10px;"><tr><td valign="middle" style="padding-right:8px;">${smSvg}</td><td valign="middle" style="color:#fff;font-family:${ff};font-size:16px;font-weight:700;letter-spacing:1px;">${esc(app.name)}</td></tr></table>`
+  const footerLogo = footerLogoImg
+    ? `<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 10px;"><tr><td valign="middle" style="padding-right:8px;">${footerLogoImg}</td><td valign="middle" style="color:#fff;font-family:${ff};font-size:16px;font-weight:700;letter-spacing:1px;">${esc(app.name)}</td></tr></table>`
     : `<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="color:#fff;font-family:${ff};font-size:16px;font-weight:700;letter-spacing:1px;padding:0 0 10px 0;">${esc(app.name)}</td></tr></table>`;
 
   return `<!DOCTYPE html>

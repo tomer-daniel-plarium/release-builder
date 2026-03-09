@@ -4,7 +4,8 @@ import { DndContext, PointerSensor, KeyboardSensor, useSensor, useSensors } from
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useEmailBuilder } from './hooks/useEmailBuilder';
 import { generateEmailHtml } from './utils/exportHtml';
-import { getPlaceholderSvg } from './utils/svgConverter';
+import { getPlaceholderSvg, convertSvgToBlue, scaleSvg } from './utils/svgConverter';
+import { getLogoPngUrls } from './utils/svgToPng';
 import TopBar from './components/TopBar';
 import LeftPanel from './components/LeftPanel';
 import Canvas from './components/Canvas';
@@ -54,8 +55,21 @@ export default function App() {
 
   const hideToast = useCallback(() => setToastVisible(false), []);
 
-  const handleCopyHtml = useCallback(() => {
-    const html = generateEmailHtml(displayApp, state.components, { headerTagline: state.headerTagline, senderEmail: state.senderEmail });
+  const buildHtml = useCallback(async () => {
+    const blueSvg = convertSvgToBlue(displayApp.svgRaw || '');
+    const headerSvg = blueSvg ? scaleSvg(blueSvg, 110, 127) : '';
+    let logoUrls = {};
+    if (headerSvg) {
+      showToast('🔄 Uploading logos...');
+      logoUrls = await getLogoPngUrls(displayApp.id, headerSvg, 110, 127, 24, 28);
+    }
+    return generateEmailHtml(displayApp, state.components, {
+      headerTagline: state.headerTagline, senderEmail: state.senderEmail, logoUrls,
+    });
+  }, [displayApp, state.components, state.headerTagline, state.senderEmail, showToast]);
+
+  const handleCopyHtml = useCallback(async () => {
+    const html = await buildHtml();
     if (navigator.clipboard) {
       navigator.clipboard.writeText(html)
         .then(() => showToast('✅ HTML copied to clipboard!'))
@@ -67,10 +81,10 @@ export default function App() {
       fallbackCopy(html);
       showToast('✅ HTML copied to clipboard!');
     }
-  }, [displayApp, state.components, state.headerTagline, state.senderEmail, showToast]);
+  }, [buildHtml, showToast]);
 
-  const handleDownloadHtml = useCallback(() => {
-    const html = generateEmailHtml(displayApp, state.components, { headerTagline: state.headerTagline, senderEmail: state.senderEmail });
+  const handleDownloadHtml = useCallback(async () => {
+    const html = await buildHtml();
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -78,7 +92,7 @@ export default function App() {
     a.click();
     URL.revokeObjectURL(a.href);
     showToast('✅ HTML file downloaded!');
-  }, [displayApp, state.components, state.headerTagline, state.senderEmail, showToast]);
+  }, [buildHtml, displayApp.name, showToast]);
 
   const handleReset = useCallback(() => {
     if (window.confirm('Reset canvas? This will clear all components.')) {

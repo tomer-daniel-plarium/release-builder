@@ -94,7 +94,7 @@ function renderComp(c) {
   return '';
 }
 
-export function generateEmailHtml(app, components, { headerTagline = 'Release Notes', senderEmail = '', logoUrls = {} } = {}) {
+export function generateEmailHtml(app, components, { headerTagline = 'Release Notes', senderEmail = '', logoUrls = {}, headerScreenshotUrl = null } = {}) {
   const blueSvg = convertSvgToBlue(app.svgRaw || '');
   const hexBg = getHexBase64();
 
@@ -144,8 +144,8 @@ export function generateEmailHtml(app, components, { headerTagline = 'Release No
 <table class="email-wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#fff;border-radius:12px;overflow:hidden;">
 
 <!-- HEADER -->
-${app.headerImage ? `<tr><td style="padding:0;font-size:0;line-height:0;border-bottom:2px solid ${B};">
-  <img src="${esc(app.headerImage)}" width="600" style="display:block;width:100%;height:auto;pointer-events:none;border:0;" alt="${esc(app.name)}"/>
+${(app.headerImage || headerScreenshotUrl) ? `<tr><td style="padding:0;font-size:0;line-height:0;border-bottom:2px solid ${B};">
+  <img src="${esc(app.headerImage || headerScreenshotUrl)}" width="600" style="display:block;width:100%;height:auto;pointer-events:none;border:0;" alt="${esc(app.name)}"/>
 </td></tr>` : `<tr><td style="background-color:${N1};background-image:url(${hexBg});background-size:cover;background-position:center;border-bottom:2px solid ${B};">
 <!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;"><v:fill type="gradient" color="${N1}" color2="${N2}" angle="135"/><v:textbox inset="0,0,0,0"><![endif]-->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">

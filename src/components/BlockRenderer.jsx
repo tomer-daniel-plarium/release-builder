@@ -291,7 +291,7 @@ export function EmailHeader({ app, tagline = 'Release Notes' }) {
   }
 
   return (
-    <div style={{
+    <div data-header-capture style={{
       position: 'relative', overflow: 'hidden',
       background: `linear-gradient(135deg, ${N1} 0%, ${N2} 60%, ${N1} 100%)`,
       borderBottom: `2px solid ${B}`,

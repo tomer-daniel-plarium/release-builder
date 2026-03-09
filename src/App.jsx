@@ -4,7 +4,7 @@ import { DndContext, PointerSensor, KeyboardSensor, useSensor, useSensors } from
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useEmailBuilder } from './hooks/useEmailBuilder';
 import { generateEmailHtml } from './utils/exportHtml';
-import { getPlaceholderSvg, convertSvgToBlue, scaleSvg } from './utils/svgConverter';
+import { getPlaceholderSvg, convertSvgToBlue } from './utils/svgConverter';
 import { getLogoPngUrls } from './utils/svgToPng';
 import TopBar from './components/TopBar';
 import LeftPanel from './components/LeftPanel';
@@ -57,11 +57,11 @@ export default function App() {
 
   const buildHtml = useCallback(async () => {
     const blueSvg = convertSvgToBlue(displayApp.svgRaw || '');
-    const headerSvg = blueSvg ? scaleSvg(blueSvg, 110, 127) : '';
     let logoUrls = {};
-    if (headerSvg) {
-      showToast('🔄 Uploading logos...');
-      logoUrls = await getLogoPngUrls(displayApp.id, headerSvg, 110, 127, 24, 28);
+    if (blueSvg) {
+      showToast('🔄 Converting logos to PNG...');
+      logoUrls = await getLogoPngUrls(displayApp.id, blueSvg, 110, 127, 24, 28);
+      if (!logoUrls.header) showToast('⚠️ Logo PNG failed — check GitHub token in Settings');
     }
     return generateEmailHtml(displayApp, state.components, {
       headerTagline: state.headerTagline, senderEmail: state.senderEmail, logoUrls,

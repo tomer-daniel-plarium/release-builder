@@ -6,7 +6,7 @@ export const SURVEYSTATION_SVG = `<svg width="260" height="301" viewBox="0 0 260
 
 export const DEFAULT_APPS = [
   { id: 'lab360', name: 'Lab360', email: 'tomer.daniel@plarium.com', svgRaw: LAB_SVG },
-  { id: 'lab360-testquest', name: 'Lab360 × TestQuest', email: 'tomer.daniel@plarium.com', svgRaw: LAB_SVG, headerImage: 'https://tomer-daniel-plarium.github.io/release-builder/email-images/hero-lab360-testquest.png' },
+  { id: 'lab360-testquest', name: 'Lab360 × TestQuest', email: 'tomer.daniel@plarium.com', svgRaw: LAB_SVG, headerImage: 'https://tomer-daniel-plarium.github.io/release-builder/email-images/hero-lab360-testquest-nadav.png' },
   { id: 'vizhub', name: 'VizHub', email: '', svgRaw: VIZHUB_SVG },
   { id: 'surveystation', name: 'SurveyStation', email: '', svgRaw: SURVEYSTATION_SVG },
   { id: 'chronicle', name: 'Chronicle', email: '', svgRaw: null },

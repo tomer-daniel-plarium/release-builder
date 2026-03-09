@@ -282,6 +282,14 @@ export default function BlockRenderer({ component }) {
 }
 
 export function EmailHeader({ app, tagline = 'Release Notes' }) {
+  if (app.headerImage) {
+    return (
+      <div style={{ borderBottom: `2px solid ${B}`, fontSize: 0, lineHeight: 0 }}>
+        <img src={app.headerImage} alt={app.name} style={{ display: 'block', width: '100%', pointerEvents: 'none' }} />
+      </div>
+    );
+  }
+
   return (
     <div style={{
       position: 'relative', overflow: 'hidden',
@@ -299,9 +307,7 @@ export function EmailHeader({ app, tagline = 'Release Notes' }) {
         <p style={{ color: B, fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 20px', fontFamily: ff }}>
           Data Applications · Midcore District, MTG
         </p>
-        {app.headerImage ? (
-          <img src={app.headerImage} alt={app.name} style={{ display: 'block', maxWidth: 420, width: '100%', margin: '0 auto', pointerEvents: 'none' }} />
-        ) : app.svgRaw ? (
+        {app.svgRaw ? (
           <SvgIcon svgRaw={app.svgRaw} w={110} h={127} centered />
         ) : (
           <div style={{

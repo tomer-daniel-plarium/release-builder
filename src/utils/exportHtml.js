@@ -144,7 +144,9 @@ export function generateEmailHtml(app, components, { headerTagline = 'Release No
 <table class="email-wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#fff;border-radius:12px;overflow:hidden;">
 
 <!-- HEADER -->
-<tr><td style="background-color:${N1};background-image:url(${hexBg});background-size:cover;background-position:center;border-bottom:2px solid ${B};">
+${app.headerImage ? `<tr><td style="padding:0;font-size:0;line-height:0;border-bottom:2px solid ${B};">
+  <img src="${esc(app.headerImage)}" width="600" style="display:block;width:100%;height:auto;pointer-events:none;border:0;" alt="${esc(app.name)}"/>
+</td></tr>` : `<tr><td style="background-color:${N1};background-image:url(${hexBg});background-size:cover;background-position:center;border-bottom:2px solid ${B};">
 <!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;"><v:fill type="gradient" color="${N1}" color2="${N2}" angle="135"/><v:textbox inset="0,0,0,0"><![endif]-->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr><td align="center" style="padding:24px 40px 0 40px;">
@@ -152,14 +154,12 @@ export function generateEmailHtml(app, components, { headerTagline = 'Release No
         <tr><td align="center" style="color:${B};font-family:${ff};font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:0 0 20px 0;">Data Applications &nbsp;&middot;&nbsp; Midcore District, MTG</td></tr>
       </table>
     </td></tr>
-    ${app.headerImage
-      ? `<tr><td align="center" style="padding:0 40px;"><img src="${esc(app.headerImage)}" width="420" style="display:block;max-width:420px;width:100%;margin:0 auto;pointer-events:none;border:0;" alt="${esc(app.name)}"/></td></tr>`
-      : headerLogo ? `<tr><td align="center" style="padding:0 40px;">${headerLogo}</td></tr>` : ''}
+    ${headerLogo ? `<tr><td align="center" style="padding:0 40px;">${headerLogo}</td></tr>` : ''}
     <tr><td align="center" style="color:#fff;font-family:${ff};font-size:24px;font-weight:800;letter-spacing:2px;padding:12px 40px 0 40px;">${esc(app.name)}</td></tr>
     <tr><td align="center" style="color:${B};font-family:${ff};font-size:10px;letter-spacing:4px;text-transform:uppercase;padding:5px 40px 28px 40px;">${esc(headerTagline)}</td></tr>
   </table>
 <!--[if gte mso 9]></v:textbox></v:rect><![endif]-->
-</td></tr>
+</td></tr>`}
 
 <!-- BODY -->
 <tr><td class="email-content" style="padding:32px 48px 36px;background:#fff;">

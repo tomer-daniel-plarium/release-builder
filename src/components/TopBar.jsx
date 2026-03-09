@@ -7,7 +7,7 @@ const btnBase = {
 
 export default function TopBar({
   apps, selectedApp, dispatch, viewMode, previewMode,
-  onCopyHtml, onDownloadHtml, onReset, onOpenTemplates, canUndo, canRedo,
+  onCopyHtml, onDownloadHtml, onReset, onOpenTemplates, onOpenSettings, onOpenGenerate, canUndo, canRedo,
 }) {
   return (
     <div style={{
@@ -61,6 +61,10 @@ export default function TopBar({
         style={{ ...btnBase, background: previewMode ? B : '#2a3f5f' }}
       >{previewMode ? '✏️ Edit' : '👁 Preview'}</button>
 
+      <button onClick={onOpenGenerate} style={{ ...btnBase, background: '#5A8DE3' }}>
+        ✨ AI Generate
+      </button>
+
       <button onClick={onOpenTemplates} style={{ ...btnBase, background: '#2a3f5f' }}>
         💾 Templates
       </button>
@@ -75,6 +79,12 @@ export default function TopBar({
 
       <button onClick={onCopyHtml} style={{ ...btnBase, background: B }}>
         ⎘ Copy HTML
+      </button>
+
+      <div style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.1)' }} />
+
+      <button onClick={onOpenSettings} style={{ ...btnBase, background: 'transparent', opacity: 0.7 }} title="LLM Settings">
+        ⚙
       </button>
     </div>
   );

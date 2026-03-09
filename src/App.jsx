@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { DndContext, PointerSensor, KeyboardSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useEmailBuilder } from './hooks/useEmailBuilder';
@@ -11,6 +12,8 @@ import RightPanel from './components/RightPanel';
 import Toast from './components/Toast';
 import TemplatesModal from './components/TemplatesModal';
 import ManageAppsModal from './components/ManageAppsModal';
+import SettingsModal from './components/SettingsModal';
+import GenerateModal from './components/GenerateModal';
 import BlockRenderer, { EmailHeader, EmailFooter } from './components/BlockRenderer';
 
 function fallbackCopy(text) {
@@ -29,6 +32,8 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState('');
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [manageAppsOpen, setManageAppsOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [generateOpen, setGenerateOpen] = useState(false);
 
   const displayApp = {
     ...selectedApp,
@@ -78,6 +83,20 @@ export default function App() {
       dispatch({ type: 'LOAD_TEMPLATE', components: [], appId: state.selectedAppId });
     }
   }, [dispatch, state.selectedAppId]);
+
+  const handleAiGenerated = useCallback((result) => {
+    const components = (result.components || [])
+      .filter(c => c.type && c.props)
+      .map(c => ({ id: uuidv4(), type: c.type, props: c.props }));
+
+    if (components.length > 0) {
+      dispatch({ type: 'LOAD_TEMPLATE', components, appId: state.selectedAppId });
+      if (result.headerTagline) {
+        dispatch({ type: 'SET_HEADER_TAGLINE', value: result.headerTagline });
+      }
+      showToast(`✨ Generated ${components.length} components`);
+    }
+  }, [dispatch, state.selectedAppId, showToast]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -146,6 +165,7 @@ export default function App() {
           viewMode={state.viewMode} previewMode={state.previewMode}
           onCopyHtml={handleCopyHtml} onDownloadHtml={handleDownloadHtml}
           onReset={handleReset} onOpenTemplates={() => setTemplatesOpen(true)}
+          onOpenSettings={() => setSettingsOpen(true)} onOpenGenerate={() => setGenerateOpen(true)}
           canUndo={canUndo} canRedo={canRedo}
         />
         <div className="flex-1 overflow-auto bg-[#f0f2f5]">
@@ -172,6 +192,7 @@ export default function App() {
           viewMode={state.viewMode} previewMode={state.previewMode}
           onCopyHtml={handleCopyHtml} onDownloadHtml={handleDownloadHtml}
           onReset={handleReset} onOpenTemplates={() => setTemplatesOpen(true)}
+          onOpenSettings={() => setSettingsOpen(true)} onOpenGenerate={() => setGenerateOpen(true)}
           canUndo={canUndo} canRedo={canRedo}
         />
         <div className="flex flex-1 overflow-hidden">
@@ -208,6 +229,11 @@ export default function App() {
       <ManageAppsModal
         isOpen={manageAppsOpen} onClose={() => setManageAppsOpen(false)}
         apps={state.apps} dispatch={dispatch}
+      />
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <GenerateModal
+        isOpen={generateOpen} onClose={() => setGenerateOpen(false)}
+        onGenerated={handleAiGenerated}
       />
     </DndContext>
   );

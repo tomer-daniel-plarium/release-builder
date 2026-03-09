@@ -144,7 +144,17 @@ export function generateEmailHtml(app, components, { headerTagline = 'Release No
 <table class="email-wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#fff;border-radius:12px;overflow:hidden;">
 
 <!-- HEADER -->
-<tr><td style="background-color:${N1};background-image:url(${hexBg});background-size:cover;background-position:center;border-bottom:2px solid ${B};">
+${app.headerImage ? `<tr><td style="background:linear-gradient(135deg,${N1},${N2});border-bottom:2px solid ${B};">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr><td align="center" style="padding:24px 40px 0 40px;">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tr><td align="center" style="color:${B};font-family:${ff};font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:0 0 16px 0;">Data Applications &nbsp;&middot;&nbsp; Midcore District, MTG</td></tr>
+      </table>
+    </td></tr>
+    <tr><td style="padding:0;"><img src="${esc(app.headerImage)}" width="600" style="display:block;width:100%;pointer-events:none;border:0;" alt="${esc(app.name)}"/></td></tr>
+    <tr><td align="center" style="color:${B};font-family:${ff};font-size:10px;letter-spacing:4px;text-transform:uppercase;padding:10px 40px 24px 40px;">${esc(headerTagline)}</td></tr>
+  </table>
+</td></tr>` : `<tr><td style="background-color:${N1};background-image:url(${hexBg});background-size:cover;background-position:center;border-bottom:2px solid ${B};">
 <!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;"><v:fill type="gradient" color="${N1}" color2="${N2}" angle="135"/><v:textbox inset="0,0,0,0"><![endif]-->
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr><td align="center" style="padding:24px 40px 0 40px;">
@@ -157,7 +167,7 @@ export function generateEmailHtml(app, components, { headerTagline = 'Release No
     <tr><td align="center" style="color:${B};font-family:${ff};font-size:10px;letter-spacing:4px;text-transform:uppercase;padding:5px 40px 28px 40px;">${esc(headerTagline)}</td></tr>
   </table>
 <!--[if gte mso 9]></v:textbox></v:rect><![endif]-->
-</td></tr>
+</td></tr>`}
 
 <!-- BODY -->
 <tr><td class="email-content" style="padding:32px 48px 36px;background:#fff;">

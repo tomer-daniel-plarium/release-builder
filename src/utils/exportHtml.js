@@ -100,14 +100,14 @@ export function generateEmailHtml(app, components, { headerTagline = 'Release No
 
   let headerLogo = '';
   if (logoUrls.header) {
-    headerLogo = `<img src="${esc(logoUrls.header)}" width="110" height="127" style="display:block;" alt="${esc(app.name)}"/>`;
+    headerLogo = `<img src="${esc(logoUrls.header)}" width="110" height="127" style="display:block;pointer-events:none;border:0;" alt="${esc(app.name)}"/>`;
   } else if (blueSvg) {
     headerLogo = scaleSvg(blueSvg, 110, 127);
   }
 
   let footerLogoImg = '';
   if (logoUrls.footer) {
-    footerLogoImg = `<img src="${esc(logoUrls.footer)}" width="24" height="28" style="display:block;" alt="${esc(app.name)}"/>`;
+    footerLogoImg = `<img src="${esc(logoUrls.footer)}" width="24" height="28" style="display:block;pointer-events:none;border:0;" alt="${esc(app.name)}"/>`;
   } else if (blueSvg) {
     footerLogoImg = scaleSvg(blueSvg, 24, 28);
   }

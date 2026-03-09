@@ -99,7 +99,9 @@ export function generateEmailHtml(app, components, { headerTagline = 'Release No
   const hexBg = getHexBase64();
 
   let headerLogo = '';
-  if (logoUrls.header) {
+  if (app.headerImage) {
+    headerLogo = `<img src="${esc(app.headerImage)}" width="100%" style="display:block;pointer-events:none;border:0;border-radius:8px;" alt="${esc(app.name)}"/>`;
+  } else if (logoUrls.header) {
     headerLogo = `<img src="${esc(logoUrls.header)}" width="110" height="127" style="display:block;pointer-events:none;border:0;" alt="${esc(app.name)}"/>`;
   } else if (blueSvg) {
     headerLogo = scaleSvg(blueSvg, 110, 127);

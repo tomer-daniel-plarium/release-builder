@@ -299,7 +299,9 @@ export function EmailHeader({ app, tagline = 'Release Notes' }) {
         <p style={{ color: B, fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 20px', fontFamily: ff }}>
           Data Applications · Midcore District, MTG
         </p>
-        {app.svgRaw ? (
+        {app.headerImage ? (
+          <img src={app.headerImage} alt={app.name} style={{ display: 'block', width: '100%', maxWidth: 500, margin: '0 auto', borderRadius: 8, pointerEvents: 'none' }} />
+        ) : app.svgRaw ? (
           <SvgIcon svgRaw={app.svgRaw} w={110} h={127} centered />
         ) : (
           <div style={{

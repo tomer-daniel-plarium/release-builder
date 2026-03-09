@@ -7,7 +7,7 @@ const btnBase = {
 
 export default function TopBar({
   apps, selectedApp, dispatch, viewMode, previewMode,
-  onCopyHtml, onDownloadHtml, onReset, onOpenTemplates, onOpenSettings, onOpenGenerate, canUndo, canRedo,
+  onCopyHtml, onDownloadHtml, onReset, onOpenTemplates, onOpenSettings, onOpenGenerate, onOpenImport, canUndo, canRedo,
 }) {
   return (
     <div style={{
@@ -63,6 +63,10 @@ export default function TopBar({
 
       <button onClick={onOpenGenerate} style={{ ...btnBase, background: '#5A8DE3' }}>
         ✨ AI Generate
+      </button>
+
+      <button onClick={onOpenImport} style={{ ...btnBase, background: '#2a3f5f' }}>
+        📥 Import
       </button>
 
       <button onClick={onOpenTemplates} style={{ ...btnBase, background: '#2a3f5f' }}>

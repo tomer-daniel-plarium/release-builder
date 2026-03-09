@@ -14,6 +14,7 @@ import TemplatesModal from './components/TemplatesModal';
 import ManageAppsModal from './components/ManageAppsModal';
 import SettingsModal from './components/SettingsModal';
 import GenerateModal from './components/GenerateModal';
+import ImportModal from './components/ImportModal';
 import BlockRenderer, { EmailHeader, EmailFooter } from './components/BlockRenderer';
 
 function fallbackCopy(text) {
@@ -34,6 +35,7 @@ export default function App() {
   const [manageAppsOpen, setManageAppsOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [generateOpen, setGenerateOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
 
   const displayApp = {
     ...selectedApp,
@@ -95,6 +97,16 @@ export default function App() {
         dispatch({ type: 'SET_HEADER_TAGLINE', value: result.headerTagline });
       }
       showToast(`✨ Generated ${components.length} components`);
+    }
+  }, [dispatch, state.selectedAppId, showToast]);
+
+  const handleImported = useCallback((result) => {
+    if (result.components.length > 0) {
+      dispatch({ type: 'LOAD_TEMPLATE', components: result.components, appId: state.selectedAppId });
+      if (result.headerTagline) {
+        dispatch({ type: 'SET_HEADER_TAGLINE', value: result.headerTagline });
+      }
+      showToast(`📥 Imported ${result.components.length} components`);
     }
   }, [dispatch, state.selectedAppId, showToast]);
 
@@ -166,6 +178,7 @@ export default function App() {
           onCopyHtml={handleCopyHtml} onDownloadHtml={handleDownloadHtml}
           onReset={handleReset} onOpenTemplates={() => setTemplatesOpen(true)}
           onOpenSettings={() => setSettingsOpen(true)} onOpenGenerate={() => setGenerateOpen(true)}
+          onOpenImport={() => setImportOpen(true)}
           canUndo={canUndo} canRedo={canRedo}
         />
         <div className="flex-1 overflow-auto bg-[#f0f2f5]">
@@ -193,6 +206,7 @@ export default function App() {
           onCopyHtml={handleCopyHtml} onDownloadHtml={handleDownloadHtml}
           onReset={handleReset} onOpenTemplates={() => setTemplatesOpen(true)}
           onOpenSettings={() => setSettingsOpen(true)} onOpenGenerate={() => setGenerateOpen(true)}
+          onOpenImport={() => setImportOpen(true)}
           canUndo={canUndo} canRedo={canRedo}
         />
         <div className="flex flex-1 overflow-hidden">
@@ -234,6 +248,10 @@ export default function App() {
       <GenerateModal
         isOpen={generateOpen} onClose={() => setGenerateOpen(false)}
         onGenerated={handleAiGenerated}
+      />
+      <ImportModal
+        isOpen={importOpen} onClose={() => setImportOpen(false)}
+        onImported={handleImported}
       />
     </DndContext>
   );
